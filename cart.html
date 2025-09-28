@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cart — OtakuFigures</title>
+<meta name="description" content="View items and proceed to checkout (demo)." />
+<link rel="icon" href="./assets/placeholder.svg">
+
+<style>
+  :root{
+    --bg:#0b0f16;
+    --text:#e8f0ff;
+    --muted:#95a1b8;
+    --brand:#00e5ff;
+    --brand2:#7c3aed;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.10);
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --bg-url: url(''); /* 可用 ?bg=... 动态替换，见文末脚本 */
+  }
+
+  body{
+    margin:0; color:var(--text); background:var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+    min-height:100dvh;
+  }
+
+  /* 背景：可选自定义底图（contain 完整显示） + 旋转银河光臂 */
+  .bg{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
+    background:
+      var(--bg-url) center/contain no-repeat fixed,
+      radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%),
+      radial-gradient(closest-corner at 50% 50%, rgba(124,58,237,.10), rgba(0,0,0,0) 70%),
+      var(--bg);
+  }
+  .disc, .disc2{
+    position:absolute; inset:-30%;
+    background: conic-gradient(from 0deg,
+      rgba(0,229,255,.10) 0 28deg, transparent 28deg 62deg,
+      rgba(124,58,237,.10) 62deg 92deg, transparent 92deg 150deg,
+      rgba(0,229,255,.10) 150deg 178deg, transparent 178deg 360deg);
+    filter: blur(56px) saturate(1.25);
+    mix-blend-mode: screen;
+    animation: spin 60s linear infinite;
+  }
+  .disc2{ inset:-24%; filter: blur(42px) saturate(1.35); animation: spin 90s linear infinite reverse; opacity:.7; }
+  @keyframes spin { to { transform: rotate(360deg) } }
+
+  .wrap{ max-width:1200px; margin:0 auto; padding:16px; }
+
+  /* 顶部导航：与 Hot Catalog 一致（吸顶、玻璃） */
+  header.sticky{ position: sticky; top: 0; z-index: 50; }
+  header .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; margin-top:12px;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border: 1px solid var(--card-border); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .brand{ font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
+  .dot{ width:10px; height:10px; display:inline-block; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--brand)); box-shadow:0 0 14px var(--brand) }
+
+  .links{
+    display:flex; gap:24px; align-items:center; white-space:nowrap;
+  }
+  .links a{
+    color:var(--text); text-decoration:none; padding:6px 12px; border-radius:999px;
+    border:1px solid transparent; transition:.15s border-color,.15s background;
+  }
+  .links a:hover{
+    border-color: rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+  }
+  .links a.active{
+    border-color: rgba(0,229,255,.45);
+    background: rgba(0,229,255,.10);
+  }
+
+  /* 卡片容器复用你现有样式：这里只做轻微玻璃效果统一风格 */
+  .card{
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  /* 表格输入的可读性与暗色适配 */
+  #cart-root input[type=number]{
+    width:72px; padding:6px 8px; border-radius:8px;
+    border:1px solid #25324e; background:#0f152b; color:var(--text);
+  }
+</style>
+</head>
+<body>
+  <!-- 背景层 -->
+  <div class="bg" aria-hidden="true">
+    <div class="disc"></div>
+    <div class="disc2"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- 统一的顶部导航 -->
+    <header class="sticky">
+      <div class="bar">
+        <div class="brand"><span class="dot" aria-hidden="true"></span> OtakuFigures</div>
+        <nav class="links" aria-label="Primary">
+          <a href="./index.html">Home</a>
+          <a href="./catalog.html">Catalog</a>
+          <a href="./about.html">About</a>
+          <a href="./shipping.html">Shipping</a>
+          <a href="./faq.html">FAQ</a>
+          <a href="./contact.html">Contact</a>
+          <a href="./cart.html" class="active">Cart</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 你的原有主体结构不变，只包在 wrap 内、并给卡片统一玻璃效果 -->
+    <main class="container">
+      <h1>Your Cart</h1>
+      <div id="cart-root" class="card" style="padding:16px; margin-top:12px"></div>
+      <div class="notice" style="margin-top:12px">Checkout is a demo. Replace the button href with your Stripe/Gumroad/etc.</div>
+    </main>
+
+    <footer>
+      <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+        <div>© <span id="y"></span> OtakuFigures</div>
+        <div class="muted">Single-folder static template • No external deps • Replace images & copy</div>
+      </div>
+    </footer>
+  </div>
+
+<script>
+/* ======== 你的原逻辑保持不变 ======== */
+function renderCart(){
+  const root = document.getElementById('cart-root');
+  const items = getCart();
+  if(items.length===0){ root.innerHTML = '<p class="muted">Your cart is empty.</p>'; return; }
+  root.innerHTML = `
+    <table class="table">
+      <thead><tr><th>Item</th><th style="width:120px">Price</th><th style="width:120px">Qty</th><th style="width:140px">Subtotal</th><th style="width:100px"></th></tr></thead>
+      <tbody>
+        ${items.map(x=>`
+          <tr>
+            <td>${x.name}</td>
+            <td>${fmt(x.price)}</td>
+            <td><input type="number" min="1" value="${x.qty}" data-id="${x.id}"></td>
+            <td>${fmt(x.price*x.qty)}</td>
+            <td><button class="btn btn-outline" data-remove="${x.id}">Remove</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px">
+      <div style="align-self:center; font-weight:800">Total: ${fmt(cartTotal())}</div>
+      <a class="btn" href="#" id="checkout">Checkout</a>
+    </div>`;
+  $$('#cart-root [data-remove]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-remove'))));
+  $$('#cart-root input[type=number]').forEach(inp=> inp.addEventListener('change', ()=> updateQty(inp.getAttribute('data-id'), inp.value)));
+  $('#checkout')?.addEventListener('click', (e)=>{
+    e.preventDefault();
+    alert('Demo checkout. Replace with your payment link.');
+  });
+}
+document.addEventListener('DOMContentLoaded', renderCart);
+
+/* 工具选择器（来自你站内其他页的写法） */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* 年份 */
+document.addEventListener('DOMContentLoaded', ()=> {
+  const y = document.getElementById('y'); if(y) y.textContent = new Date().getFullYear();
+});
+
+/* 自动高亮当前导航（防止多个页面类名写死 active） */
+(function () {
+  var current = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('nav.links a').forEach(function (a) {
+    var href = (a.getAttribute('href') || '').replace('./','');
+    if (!href) return;
+    if (current === href) a.classList.add('active');
+    else a.classList.remove('active');
+  });
+})();
+
+/* 可选：用 URL 参数设置背景图（完整显示 contain）
+   例：cart.html?bg=https://example.com/bg.jpg */
+(function () {
+  var params = new URLSearchParams(location.search);
+  var bgUrl = params.get('bg');
+  if (bgUrl) document.documentElement.style.setProperty('--bg-url', "url('" + bgUrl.trim() + "')");
+})();
+</script>
+
+<!-- 依赖你项目现有的 app.js（内含 fmt/getCart 等） -->
+<script src="./app.js"></script>
+</body>
+</html>

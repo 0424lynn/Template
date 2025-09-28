@@ -1,0 +1,83 @@
+
+:root{
+  --brand:#00e5ff;
+  --bg:#030712;
+  --card:#0b1220;
+  --text:#e6eaf2;
+  --muted:#8b9bb0;
+  --ring:#7c3aed;
+  --radius:16px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --maxw: 1180px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+  color:var(--text);
+  body{
+    /* 其他保持不变 */
+    background:
+      /* 顶层：原来的放射渐变，给画面一点层次 */
+      radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%),
+      /* 其上再加一层轻微暗化，保证文字可读 */
+      linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,.45)),
+      /* 你的背景图（相对路径）*/
+      url('picture/red.jpg') center/cover no-repeat fixed,
+      /* 最底：纯色兜底 */
+      var(--bg);
+  }
+  
+    
+  
+  letter-spacing:.2px;
+}
+a{color:var(--brand); text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:var(--maxw); margin-inline:auto; padding:24px}
+.row{display:grid; gap:24px}
+.grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+@media (max-width:900px){ .grid-3{grid-template-columns:1fr} }
+.btn{display:inline-flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px; border:1px solid transparent; background:var(--brand); color:white; font-weight:700; box-shadow:var(--shadow)}
+.btn:hover{filter:brightness(1.06)}
+.btn-outline{background:transparent; color:var(--text); border:1px solid #2b3348}
+.card{background:var(--card); border:1px solid #22304e; border-radius:var(--radius); box-shadow:var(--shadow)}
+.badge{display:inline-block; padding:6px 10px; border-radius:999px; background:#0f152b; color:#c7b8ff; border:1px solid #1b2445; font-weight:700; font-size:12px; letter-spacing:.3px}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+header{position:sticky; top:0; backdrop-filter:saturate(150%) blur(6px); background:rgba(11,15,26,.6); border-bottom:1px solid #1c2340; z-index:10}
+nav{display:flex; align-items:center; justify-content:space-between; gap:16px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px}
+.brand .dot{width:10px; height:10px; border-radius:50%; background:var(--brand); box-shadow:0 0 0 6px rgba(139,92,246,.22)}
+.nav-links{display:flex; gap:18px; align-items:center}
+.nav-links a{color:var(--text)}
+.menu{display:none}
+@media (max-width:880px){ .nav-links{display:none} .menu{display:inline-flex} }
+.hero{padding:64px 0}
+.hero h1{font-size:clamp(28px, 5vw, 50px); line-height:1.1; margin:10px 0 12px}
+.hero p{font-size:18px; color:var(--muted)}
+.surface{padding:14px 16px; border-radius:12px; border:1px dashed #2b3348; background:linear-gradient(180deg, rgba(139,92,246,.07), transparent 40%)}
+.gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px}
+.product{overflow:hidden}
+.product img{width:100%; height:220px; object-fit:cover; border-top-left-radius:14px; border-top-right-radius:14px; border-bottom:1px solid #22304e; background:#0b0f1a}
+.price{font-size:20px; font-weight:800}
+footer{padding:40px 0; color:var(--muted)}
+:focus-visible{outline:3px solid var(--ring); outline-offset:3px; border-radius:10px}
+.table{width:100%; border-collapse:collapse}
+.table th,.table td{border:1px solid #22304e; padding:10px 12px; text-align:left}
+.hero-banner{border-radius:16px; border:1px solid #22304e; overflow:hidden}
+.notice{padding:10px 12px; border:1px dashed #2b3348; border-radius:12px; background:#0f152b; color:var(--muted)}
+
+/* JJK neon accents */
+.neon {
+  text-shadow: 0 0 8px rgba(0,229,255,.8), 0 0 16px rgba(124,58,237,.55);
+}
+.grad-border {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(135deg, #00e5ff, #7c3aed) border-box;
+  border-radius: var(--radius);
+}

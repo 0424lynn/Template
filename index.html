@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <div class="sky" aria-hidden="true"></div>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home — OtakuFigures</title>
+  <meta name="description" content="Official store theme for anime figures: preorders, in-stock, and limited editions." />
+  <link rel="icon" href="./assets/placeholder.svg">
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- ↓↓↓ 仅新增：与 Hot Catalog 同款的导航样式（其余不变） ↓↓↓ -->
+  <style>
+    /* 顶部：品牌 + 导航（吸顶、玻璃态） */
+    header.sticky{ position: sticky; top: 0; z-index: 50; }
+    header .bar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:12px 16px;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      margin-top: 12px;
+    }
+    .brand{ font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
+    .dot{ width:10px; height:10px; display:inline-block; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #00e5ff); box-shadow:0 0 14px #00e5ff }
+
+    .links{
+      display:flex; gap:24px; align-items:center; white-space:nowrap;
+    }
+    .links a{
+      color:var(--text, #e8f0ff); text-decoration:none; padding:6px 12px; border-radius:999px;
+      border:1px solid transparent; transition:.15s border-color,.15s background;
+    }
+    .links a:hover{
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+    }
+    .links a.active{
+      border-color: rgba(0,229,255,.45);
+      background: rgba(0,229,255,.10);
+    }
+  </style>
+  <!-- ↑↑↑ 仅新增导航样式 ↑↑↑ -->
+
+  <style>
+    /* 星空层：固定在底层，不挡交互 */
+    .sky{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0}
+    /* 内容浮在星空之上（header 本来就更高） */
+    main, footer{position:relative; z-index:1}
+  
+    /* 闪烁星点（背景更“明显”） */
+    .star{
+      position:absolute; width:2px; height:2px; border-radius:50%;
+      background:rgba(255,255,255,.9); box-shadow:0 0 6px rgba(255,255,255,.8);
+      opacity:.6; animation:twinkle var(--t,3s) ease-in-out infinite;
+    }
+    @keyframes twinkle{ 0%,100%{opacity:.25} 50%{opacity:1} }
+  
+    /* 更亮、更粗、更长尾的流星 */
+    .meteor{
+      position:absolute; top:-10vh;
+      width:3px; height:3px; border-radius:2px;
+      background:linear-gradient(90deg, rgba(255,255,255,.98), rgba(255,255,255,0));
+      box-shadow:
+        0 0 14px rgba(255,255,255,.85),
+        0 0 30px rgba(0,229,255,.45);
+      transform:translate3d(0,0,0) rotate(var(--rot,45deg));
+      opacity:0; will-change:transform,opacity;
+      z-index:1;
+    }
+    .meteor::after{
+      content:""; position:absolute; left:-260px; top:0;
+      width:260px; height:3px;
+      background:linear-gradient(90deg, rgba(0,229,255,0), rgba(0,229,255,1), rgba(124,58,237,.9), rgba(0,229,255,0));
+      filter:blur(1px);
+    }
+    .meteor.big{ width:4px; height:4px }
+    .meteor.big::after{ height:4px; width:340px }
+  
+    @keyframes fall{
+      0%{opacity:0; transform:translate3d(var(--x,-20vw), -10vh, 0) rotate(var(--rot,45deg));}
+      8%{opacity:1;}
+      100%{opacity:0; transform:translate3d(calc(var(--x,-20vw) + 140vw), 130vh, 0) rotate(var(--rot,45deg));}
+    }
+  
+    /* 关怀：减少动画偏好时禁用 */
+    @media (prefers-reduced-motion: reduce){ .sky{display:none} }
+  </style>
+  
+  <style>
+    /* 动态彩色文字（从左到右） */
+    .rainbow {
+      --h: 50;
+      background: linear-gradient(90deg,
+        #ff5c7a, #ffbf3c, #36e39f, #3ab4ff, #a78bfa, #ff5c7a);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbow-slide 6s linear infinite;
+    }
+    @keyframes rainbow-slide {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rainbow { animation: none; background-size: 100% 100%; }
+    }
+  </style>
+  
+  <style>
+    /* 仅桌面端把 Hero 文案整体上移一些 */
+    @media (min-width: 900px){
+      .hero { padding-top: 48px; padding-bottom: 72px; }
+      .hero .row{ align-items: flex-start; }
+      .hero .row > div:first-child{
+        transform: translateY(-48px);
+      }
+    }
+  </style>
+  
+  <style>
+    .product img{
+      width: 100%;
+      height: auto !important;
+      object-fit: contain !important;
+      display: block;
+      background: transparent;
+    }
+  </style>
+  
+  <style>
+    /* 全站背景：你的图片在 ./picture/red.jpg */
+    body{
+      background:
+        radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%),
+        linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,.45)),
+        url('picture/red.jpg') center/cover no-repeat fixed,
+        var(--bg);
+    }
+  </style>
+</head>
+
+<body>
+<!-- ✅ 改成与 Hot Catalog 同款的导航（含 Cart），其余不变 -->
+<header class="sticky">
+  <div class="container">
+    <div class="bar">
+      <div class="brand"><span class="dot" aria-hidden="true"></span> OtakuFigures</div>
+      <nav class="links" aria-label="Primary">
+        <a href="./index.html" class="active">Home</a>
+        <a href="./catalog.html">Catalog</a>
+        <a href="./about.html">About</a>
+        <a href="./shipping.html">Shipping</a>
+        <a href="./faq.html">FAQ</a>
+        <a href="./contact.html">Contact</a>
+        <a href="./cart.html">Cart</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container row" style="grid-template-columns:1fr">
+      <div>
+        <span class="badge">Official Store Theme • Anime Figures</span>
+        <h1 class="rainbow">Showcase your figures, sell faster</h1>
+
+        <p>Clean, fast, and mobile-first multi-page theme. Perfect for figure brands and resellers: scale with collections, product pages, and a simple cart.</p>
+        <div style="display:flex; gap:12px; margin-top:18px">
+          <a class="btn" href="./catalog.html">Browse Catalog</a>
+          <a class="btn btn-outline" href="./about.html">About the Brand</a>
+        </div>
+      </div>
+      <div class="card hero-banner"></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2 class="center">Featured Collections</h2>
+    <div class="gallery" style="margin-top:12px">
+      <a class="card product" href="./catalog.html?collection=preorders" style="text-decoration:none">
+        <img src="https://i.pinimg.com/736x/7e/bc/1b/7ebc1bcd1e256c2145935905cb36116c.jpg" alt="Preorders">
+        <div style="padding:14px 16px">
+          <h3>Preorders</h3>
+          <p class="muted">Reserve upcoming releases from top studios.</p>
+        </div>
+      </a>
+      <a class="card product" href="./catalog.html?collection=scale" style="text-decoration:none">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.zO6rCn8Wg69TUD9Tosxn-AHaNN?w=996&h=1777&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Scale Figures">
+        <div style="padding:14px 16px">
+          <h3>1/7 • 1/6 Scale</h3>
+          <p class="muted">Premium sculpts and paintwork.</p>
+        </div>
+      </a>
+      <a class="card product" href="./catalog.html?collection=nendoroid" style="text-decoration:none">
+        <img src="https://i.pinimg.com/originals/7b/88/8d/7b888d6dc8ab3d00a77ae1b676d03323.jpg" alt="Chibi & Nendoroid">
+        <div style="padding:14px 16px">
+          <h3>Chibi / Nendoroid</h3>
+          <p class="muted">Cute lineups, massive accessories.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+    <div>© <span id="y"></span> OtakuFigures</div>
+    <div class="muted">Single-folder static template • No external deps • Replace images & copy</div>
+  </div>
+</footer>
+
+<script src="./app.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+<!-- （可选）自动高亮当前导航：放在底部，不影响其它逻辑 -->
+<script>
+(function () {
+  var current = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('nav.links a').forEach(function (a) {
+    var href = (a.getAttribute('href') || '').replace('./','');
+    if (!href) return;
+    if (current === href) a.classList.add('active');
+    else a.classList.remove('active');
+  });
+})();
+</script>
+
+<script>
+  (function(){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const sky = document.querySelector('.sky');
+    if(!sky) return;
+
+    const STAR_COUNT = 140;
+    const frag = document.createDocumentFragment();
+    for(let i=0;i<STAR_COUNT;i++){
+      const s = document.createElement('i');
+      s.className = 'star';
+      const size = Math.random()<0.2 ? 3 : 2;
+      s.style.left = (Math.random()*100) + 'vw';
+      s.style.top  = (Math.random()*100) + 'vh';
+      s.style.width = size+'px'; s.style.height = size+'px';
+      s.style.setProperty('--t', (2+Math.random()*3)+'s');
+      s.style.animationDelay = (Math.random()*3)+'s';
+      frag.appendChild(s);
+    }
+    sky.appendChild(frag);
+
+    const MAX_METEORS = 48;
+    const countMeteors = ()=> sky.querySelectorAll('.meteor').length;
+
+    function spawn(){
+      if(countMeteors() >= MAX_METEORS) return;
+      const m = document.createElement('div');
+      m.className = 'meteor';
+      if(Math.random()<0.35) m.classList.add('big');
+
+      const startX = -70 + Math.random()*50;
+      const topVH  = Math.random()*85;
+      const rot    = 33 + Math.random()*24;
+      const dur    = 1.3 + Math.random()*2.2;
+
+      m.style.setProperty('--x', startX+'vw');
+      m.style.setProperty('--rot', rot+'deg');
+      m.style.top = topVH + 'vh';
+      m.style.animation = `fall ${dur}s linear forwards`;
+
+      sky.appendChild(m);
+      setTimeout(()=> m.remove(), dur*1000 + 250);
+    }
+
+    function loop(){
+      const r = Math.random();
+      if (r < 0.25){ spawn(); spawn(); }
+      else if (r < 0.30){ spawn(); spawn(); spawn(); }
+      else { spawn(); }
+      const delay = 140 + Math.random()*260;
+      setTimeout(loop, delay);
+    }
+
+    for(let i=0;i<6;i++) setTimeout(spawn, i*180);
+    loop();
+  })();
+</script>
+</body>
+</html>

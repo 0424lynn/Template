@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FAQ — OtakuFigures</title>
+<meta name="description" content="Common questions about preorders, stock, payments, shipping, returns, and authenticity." />
+<link rel="icon" href="./assets/placeholder.svg">
+
+<style>
+  :root{
+    --bg:#0b0f16;
+    --text:#e8f0ff;
+    --muted:#95a1b8;
+    --brand:#00e5ff;
+    --brand2:#7c3aed;
+    --card: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --radius: 14px;
+    --shadow: 0 12px 34px rgba(0,0,0,.38);
+    --wrap-w: 1200px;
+  }
+
+  /* ==== 背景（银河旋转光臂） ==== */
+  body{
+    margin:0; color:var(--text); background:var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC","Microsoft YaHei","Noto Sans CJK SC", Arial, sans-serif;
+    min-height:100dvh;
+  }
+  .bg{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%),
+      radial-gradient(closest-corner at 50% 50%, rgba(124,58,237,.10), rgba(0,0,0,0) 70%),
+      var(--bg);
+  }
+  .disc, .disc2{
+    position:absolute; inset:-30%;
+    background: conic-gradient(from 0deg,
+      rgba(0,229,255,.10) 0 28deg, transparent 28deg 62deg,
+      rgba(124,58,237,.10) 62deg 92deg, transparent 92deg 150deg,
+      rgba(0,229,255,.10) 150deg 178deg, transparent 178deg 360deg);
+    filter: blur(56px) saturate(1.25);
+    mix-blend-mode: screen;
+    animation: spin 70s linear infinite;
+  }
+  .disc2{ inset:-24%; filter: blur(42px) saturate(1.35); animation: spin 110s linear infinite reverse; opacity:.75; }
+  @keyframes spin { to { transform: rotate(360deg) } }
+
+  .wrap{ max-width:var(--wrap-w); margin:0 auto; padding:16px; }
+
+  /* ==== 顶部横向导航（吸顶） ==== */
+  header.sticky{ position: sticky; top: 0; z-index: 50; }
+  header .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border: 1px solid var(--card-border); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .brand{ font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
+  .dot{ width:10px; height:10px; display:inline-block; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--brand)); box-shadow:0 0 14px var(--brand) }
+  .links{
+    display:flex; gap:22px; align-items:center; white-space:nowrap;
+  }
+  .links a{
+    color:var(--text); text-decoration:none; padding:6px 12px; border-radius:999px;
+    border:1px solid transparent; transition:.15s border-color,.15s background;
+  }
+  .links a:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+  .links a.active{ border-color: rgba(0,229,255,.45); background: rgba(0,229,255,.10); }
+
+  /* ==== 工具栏：搜索 + 分类 + 全部展开/收起 ==== */
+  .toolbar{
+    margin-top:12px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding:10px 12px;
+    backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    border:1px solid var(--card-border); border-radius: var(--radius);
+  }
+  .input{
+    display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px;
+    border:1px solid var(--card-border); background:rgba(4,10,20,.65); color:var(--text);
+  }
+  .input input{ all:unset; width:240px; }
+  .chips{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .chip{
+    border:1px solid var(--card-border); padding:8px 12px; border-radius:999px; color:var(--text);
+    background:rgba(255,255,255,.04); cursor:pointer; user-select:none;
+  }
+  .chip.active{ border-color:rgba(0,229,255,.45); box-shadow:0 0 0 2px rgba(0,229,255,.15) inset; }
+  .spacer{ flex:1 }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:10px 14px; border-radius:10px; cursor:pointer; user-select:none;
+    color:#001018; background:#00e5ff; font-weight:800; border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 10px 20px rgba(0,229,255,.25);
+  }
+
+  /* ==== FAQ 列表（可折叠） ==== */
+  .list{ margin-top:14px; display:grid; gap:10px; }
+  details.qa{
+    border:1px solid var(--card-border); border-radius:12px; overflow:hidden;
+    background: rgba(255,255,255,.05);
+  }
+  details.qa[open]{ box-shadow: var(--shadow); }
+  details.qa summary{
+    list-style:none; cursor:pointer; padding:12px 14px; font-weight:700;
+    background: rgba(255,255,255,.06);
+    display:flex; align-items:center; gap:10px; justify-content:space-between;
+  }
+  details.qa summary::-webkit-details-marker{ display:none }
+  .qa .a{ padding:12px 14px; color:var(--muted) }
+  .tag{
+    font-size:12px; padding:4px 8px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+    color: var(--muted);
+    white-space:nowrap;
+  }
+  .copy{
+    font-size:12px; color:var(--muted); cursor:pointer; user-select:none;
+  }
+  .hit{ outline:2px solid rgba(0,229,255,.45); box-shadow:0 0 0 4px rgba(0,229,255,.13); }
+
+  /* ==== 联系 CTA ==== */
+  .contact{
+    margin-top:16px; padding:16px; border-radius:var(--radius);
+    background: var(--card); border:1px solid var(--card-border);
+    box-shadow: var(--shadow); display:flex; align-items:center; gap:12px; justify-content:space-between; flex-wrap:wrap;
+  }
+  .contact .desc{ color:var(--muted) }
+  .contact .btn{ white-space:nowrap }
+
+  footer .note{ color:var(--muted); font-size:14px; text-align:center; padding:18px 0 28px; }
+
+  @media (max-width: 560px){
+    .input input{ width:160px }
+  }
+</style>
+</head>
+<body>
+  <!-- 背景层 -->
+  <div class="bg" aria-hidden="true">
+    <div class="disc"></div>
+    <div class="disc2"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- 顶部横向导航（保留 index 导航页） -->
+    <header class="sticky">
+      <div class="bar">
+        <div class="brand"><span class="dot" aria-hidden="true"></span> OtakuFigures</div>
+        <nav class="links" aria-label="Primary">
+          <a href="./index.html">Home</a>
+          <a href="./catalog.html">Catalog</a>
+          <a href="./about.html">About</a>
+          <a href="./shipping.html">Shipping</a>
+          <a href="./faq.html" class="active">FAQ</a>
+          <a href="./contact.html">Contact</a>
+          <a href="./cart.html" style="border:1px solid rgba(0,229,255,.45); padding:6px 12px; border-radius:999px; background:rgba(0,229,255,.10)">Cart</a>
+        </nav>
+      </div>
+
+      <!-- 工具栏 -->
+      <div class="toolbar" role="search">
+        <label class="input" title="Search FAQs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/></svg>
+          <input id="q" placeholder="Search questions…" />
+        </label>
+        <div class="chips" aria-label="Categories">
+          <div class="chip active" data-cat="all">All</div>
+          <div class="chip" data-cat="preorder">Preorders</div>
+          <div class="chip" data-cat="shipping">Shipping</div>
+          <div class="chip" data-cat="returns">Returns</div>
+          <div class="chip" data-cat="payment">Payments</div>
+          <div class="chip" data-cat="auth">Authenticity</div>
+        </div>
+        <div class="spacer"></div>
+        <button id="toggleAll" class="btn" type="button">Expand all</button>
+      </div>
+    </header>
+
+    <main style="margin-top:14px">
+      <h1 style="margin:0 0 8px">FAQ</h1>
+      <div id="list" class="list"></div>
+
+      <!-- 联系 CTA -->
+      <section class="contact" aria-label="Contact support">
+        <div>
+          <strong>Still need help?</strong>
+          <div class="desc">Can’t find the answer? Reach out and we’ll get back within 24h.</div>
+        </div>
+        <a class="btn" href="./contact.html">Contact Support</a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="note">© <span id="y"></span> OtakuFigures — FAQ template. Replace copy as needed.</div>
+    </footer>
+  </div>
+
+<script>
+  // 年份
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  /* 可选：?bg=... 设置自定义背景图（完整显示 contain）
+     例：faq-hot.html?bg=picture/space.jpg */
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var bg = params.get('bg');
+    if (bg) {
+      var el = document.querySelector('.bg');
+      el.style.backgroundImage =
+        "url('" + bg.replace(/'/g, "\\'") + "')," +
+        "radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%)," +
+        "radial-gradient(closest-corner at 50% 50%, rgba(124,58,237,.10), rgba(0,0,0,0) 70%)," +
+        "var(--bg)";
+      el.style.backgroundRepeat = "no-repeat, no-repeat, no-repeat, no-repeat";
+      el.style.backgroundPosition = "center, center, center, center";
+      el.style.backgroundSize = "contain, auto, auto, auto";
+      el.style.backgroundAttachment = "fixed, fixed, fixed, fixed";
+    }
+  })();
+
+  // FAQ 数据（可按需增删）
+  const FAQS = [
+    { id:'pre-1', q:'How do preorders work?', a:'We charge at checkout to secure your unit. You can cancel before shipment. ETAs are provided by the studio and updated on product pages.', cat:'preorder' },
+    { id:'pre-2', q:'Can I cancel a preorder?', a:'Yes—until the shipment notice is issued. After that, standard return policy applies.', cat:'preorder' },
+    { id:'ship-1', q:'What are your shipping options?', a:'Standard and expedited options are available at checkout. All parcels are tracked with protective packing.', cat:'shipping' },
+    { id:'ship-2', q:'Do you offer split shipments?', a:'Yes. On request, we can split in-stock items from preorders so you get them sooner.', cat:'shipping' },
+    { id:'ret-1', q:'What is your return window?', a:'30-day return window for unopened items. Defective-on-arrival claims supported within 7 days.', cat:'returns' },
+    { id:'ret-2', q:'How do I start a return?', a:'Email support with your order ID and reason. We’ll issue an RMA and instructions.', cat:'returns' },
+    { id:'pay-1', q:'Which payment methods are accepted?', a:'Stripe (cards & wallets) and PayPal. For large orders, bank transfer can be arranged.', cat:'payment' },
+    { id:'auth-1', q:'Are your figures authentic?', a:'Yes. We only sell licensed items from official distributors. Beware of prices that seem too good to be true.', cat:'auth' }
+  ];
+
+  const $  = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const list = $('#list');
+
+  function qaItem(item){
+    const el = document.createElement('details');
+    el.className = 'qa';
+    el.dataset.cat = item.cat;
+    el.id = item.id;
+
+    el.innerHTML = `
+      <summary>
+        <span>${item.q}</span>
+        <span style="display:flex; align-items:center; gap:10px">
+          <span class="tag">${item.cat}</span>
+          <span class="copy" data-copy="#${item.id}" title="Copy link">#</span>
+        </span>
+      </summary>
+      <div class="a">${item.a}</div>
+    `;
+    return el;
+  }
+
+  function render(listData){
+    list.innerHTML = '';
+    listData.forEach(x => list.appendChild(qaItem(x)));
+    // 绑定复制
+    $$('.copy').forEach(btn => btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const hash = btn.dataset.copy;
+      navigator.clipboard?.writeText(location.origin + location.pathname + hash);
+      btn.textContent = 'Copied';
+      setTimeout(()=> btn.textContent = '#', 700);
+    }));
+  }
+
+  // 初始渲染
+  render(FAQS);
+
+  // 过滤 + 搜索
+  let state = { cat:'all', q:'' };
+
+  function apply(){
+    let arr = FAQS.slice();
+    if(state.cat !== 'all'){ arr = arr.filter(x => x.cat === state.cat); }
+    if(state.q){
+      const k = state.q.toLowerCase();
+      arr = arr.filter(x => (x.q + ' ' + x.a).toLowerCase().includes(k));
+    }
+    render(arr);
+  }
+
+  // 分类
+  $$('.chip').forEach(ch => ch.addEventListener('click', ()=>{
+    $$('.chip').forEach(x => x.classList.remove('active'));
+    ch.classList.add('active');
+    state.cat = ch.dataset.cat;
+    apply();
+  }));
+
+  // 搜索
+  $('#q').addEventListener('input', e=>{ state.q = e.target.value.trim(); apply(); });
+
+  // 全部展开/收起
+  (function(){
+    const btn = document.getElementById('toggleAll');
+    let open = false;
+    btn.addEventListener('click', ()=>{
+      open = !open;
+      $$('#list details.qa').forEach(d => d.open = open);
+      btn.textContent = open ? 'Collapse all' : 'Expand all';
+    });
+  })();
+
+  // 直达某条（hash）
+  (function(){
+    if(location.hash){
+      const id = location.hash.slice(1);
+      const target = document.getElementById(id);
+      if(target){
+        target.open = true;
+        target.classList.add('hit');
+        target.scrollIntoView({ behavior:'smooth', block:'center' });
+        setTimeout(()=> target.classList.remove('hit'), 1400);
+      }
+    }
+  })();
+</script>
+</body>
+</html>

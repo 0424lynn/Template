@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About — OtakuFigures</title>
+<meta name="description" content="Our brand story, quality control, and authenticity." />
+<link rel="icon" href="./assets/placeholder.svg">
+
+<style>
+  :root{
+    --bg:#0b0f16;
+    --text:#e8f0ff;
+    --muted:#95a1b8;
+    --brand:#00e5ff;
+    --brand2:#7c3aed;
+    --card: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --radius: 14px;
+    --shadow: 0 12px 34px rgba(0,0,0,.38);
+    --img-fit: cover;
+    --wrap-w: 1200px;
+  }
+
+  /* ========== 背景（银河旋转光臂 + 可选自定义底图） ========== */
+  body{
+    margin:0; color:var(--text); background:var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC","Microsoft YaHei","Noto Sans CJK SC", Arial, sans-serif;
+    min-height:100dvh;
+  }
+  .bg{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%),
+      radial-gradient(closest-corner at 50% 50%, rgba(124,58,237,.10), rgba(0,0,0,0) 70%),
+      var(--bg);
+  }
+  .disc, .disc2{
+    position:absolute; inset:-30%;
+    background: conic-gradient(from 0deg,
+      rgba(0,229,255,.10) 0 28deg, transparent 28deg 62deg,
+      rgba(124,58,237,.10) 62deg 92deg, transparent 92deg 150deg,
+      rgba(0,229,255,.10) 150deg 178deg, transparent 178deg 360deg);
+    filter: blur(56px) saturate(1.25);
+    mix-blend-mode: screen;
+    animation: spin 70s linear infinite;
+  }
+  .disc2{ inset:-24%; filter: blur(42px) saturate(1.35); animation: spin 110s linear infinite reverse; opacity:.75; }
+  @keyframes spin { to { transform: rotate(360deg) } }
+
+  .wrap{ max-width:var(--wrap-w); margin:0 auto; padding:16px; }
+
+  /* ========== 顶部导航（吸顶） ========== */
+  header.sticky{ position: sticky; top: 0; z-index: 50; }
+  header .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border: 1px solid var(--card-border); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .brand{ font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
+  .dot{ width:10px; height:10px; display:inline-block; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--brand)); box-shadow:0 0 14px var(--brand) }
+  .links{
+    display:flex; gap:22px; align-items:center; white-space:nowrap;
+  }
+  .links a{
+    color:var(--text); text-decoration:none; padding:6px 12px; border-radius:999px;
+    border:1px solid transparent; transition:.15s border-color,.15s background;
+  }
+  .links a:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+  .links a.active{ border-color: rgba(0,229,255,.45); background: rgba(0,229,255,.10); }
+
+  /* ========== Hero ========== */
+  .hero{
+    margin-top:16px;
+    display:grid; gap:16px;
+    grid-template-columns: 1.1fr .9fr;
+  }
+  .kpis{
+    display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;
+  }
+  .kpi{
+    padding:12px 14px; border-radius:12px;
+    background: rgba(255,255,255,.06); border:1px solid var(--card-border);
+  }
+  .hero-visual{
+    border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--card-border); box-shadow: var(--shadow);
+    background: linear-gradient(180deg, rgba(0,229,255,.06), rgba(124,58,237,.06));
+    min-height: 320px;
+    display:grid; place-items:center;
+  }
+  .hero-visual img{
+    width:100%; height:100%; object-fit: var(--img-fit); display:block;
+  }
+  .badge{
+    display:inline-flex; gap:8px; align-items:center;
+    padding:6px 10px; border-radius:999px; font-size:12px; color:var(--text);
+    background: rgba(0,229,255,.10); border:1px solid rgba(0,229,255,.35);
+    box-shadow: 0 0 0 2px rgba(0,229,255,.12) inset;
+  }
+  .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  h1{ margin:10px 0 8px; font-size: clamp(28px, 4.5vw, 40px); }
+  p.lead{ color:var(--muted); font-size: 15.5px; }
+
+  /* ========== 三大卖点 ========== */
+  .cards{
+    display:grid; gap:16px; margin-top:18px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .card{
+    padding:16px; border-radius: var(--radius);
+    background: var(--card); border:1px solid var(--card-border);
+    box-shadow: var(--shadow);
+  }
+  .card h3{ margin:0 0 6px; }
+  .muted{ color:var(--muted); }
+
+  /* ========== 真实性 & 质检流程 ========== */
+  .steps{ display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top:12px; }
+  .step{ background: rgba(255,255,255,.05); border:1px solid var(--card-border); border-radius:12px; padding:12px; }
+  .step .n{ font-weight:800; color:#fff; text-shadow:0 0 10px rgba(0,229,255,.45); }
+
+  /* ========== 品牌背书 ========== */
+  .logos{
+    margin-top:10px; display:grid; gap:12px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    opacity:.95;
+  }
+  .logo{
+    height:48px; border-radius:12px; border:1px dashed rgba(255,255,255,.18);
+    background: rgba(255,255,255,.04); display:grid; place-items:center; color:var(--muted);
+  }
+
+  /* ========== 里程碑时间线 ========== */
+  .timeline{ margin-top:8px; border-left:2px dashed rgba(255,255,255,.18); padding-left:14px; }
+  .t-item{ margin:12px 0; position:relative; }
+  .t-item::before{
+    content:""; position:absolute; left:-10px; top:6px; width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--brand));
+    box-shadow:0 0 12px var(--brand);
+  }
+  .t-date{ font-weight:800; margin-bottom:4px; }
+
+  /* ========== FAQ 折叠 ========== */
+  .faq{ margin-top:8px; }
+  .qa{
+    border:1px solid var(--card-border); border-radius:12px; overflow:hidden;
+    background: rgba(255,255,255,.05); margin-bottom:10px;
+  }
+  .qa summary{
+    list-style:none; cursor:pointer; padding:12px 14px; font-weight:700;
+    background: rgba(255,255,255,.06);
+  }
+  .qa summary::-webkit-details-marker{ display:none }
+  .qa .a{ padding:12px 14px; color:var(--muted) }
+
+  /* ========== 通用布局微调 ========== */
+  section{ margin-top:18px }
+  .section-title{ display:flex; align-items:center; gap:10px; }
+  .section-title .line{ flex:1; height:1px; background: linear-gradient(90deg, rgba(0,229,255,.18), rgba(124,58,237,.18)); }
+
+  footer .note{ color:var(--muted); font-size:14px; text-align:center; padding:18px 0 28px; }
+
+  /* 响应式 */
+  @media (max-width: 900px){
+    .hero{ grid-template-columns: 1fr; }
+    .hero-visual{ min-height: 240px; }
+  }
+</style>
+</head>
+<body>
+  <!-- 背景层 -->
+  <div class="bg" aria-hidden="true">
+    <div class="disc"></div>
+    <div class="disc2"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- 顶部导航 -->
+    <header class="sticky">
+      <div class="bar">
+        <div class="brand"><span class="dot" aria-hidden="true"></span> OtakuFigures</div>
+        <nav class="links" aria-label="Primary">
+          <a href="./index.html">Home</a>
+          <a href="./catalog.html">Catalog</a>
+          <a href="./about.html" class="active">About</a>
+          <a href="./shipping.html">Shipping</a>
+          <a href="./faq.html">FAQ</a>
+          <a href="./contact.html">Contact</a>
+          <a href="./cart.html" class="active-pill" style="border:1px solid rgba(0,229,255,.45); padding:6px 12px; border-radius:999px; background:rgba(0,229,255,.10)">Cart</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <main>
+      <section class="hero">
+        <div>
+          <span class="badge mono">Since 2016 • Official Partners • Anti-Bootleg</span>
+          <h1>About OtakuFigures</h1>
+          <p class="lead">Started in 2016, OtakuFigures curates licensed anime figures and collaborates with respected studios. We obsess over QC so your shelf always looks peak. All items are sourced from official distributors — we fight bootlegs and educate customers with comparison guides.</p>
+
+          <div class="kpis">
+            <div class="kpi"><div class="mono">10k+</div><div class="muted">Orders Shipped</div></div>
+            <div class="kpi"><div class="mono">98%</div><div class="muted">Positive Reviews</div></div>
+            <div class="kpi"><div class="mono">50+</div><div class="muted">Studio Partners</div></div>
+          </div>
+        </div>
+
+        <figure class="hero-visual">
+          <!-- 替换成你的品牌/工作室照片 -->
+          <img src="https://img.freepik.com/premium-photo/character-male-chibi-kawaii-street-performer-funky-attire-rainbow-colo-concept-art-sheet-manga_655090-1207509.jpg" alt="Studio photo">
+        </figure>
+      </section>
+
+      <!-- 三大卖点 -->
+      <section>
+        <div class="section-title">
+          <h2>Why collectors choose us</h2><div class="line"></div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>Licensed Only</h3>
+            <p class="muted">Official distributors and trusted partners. No grey market, no risks.</p>
+          </article>
+          <article class="card">
+            <h3>Obsessive QC</h3>
+            <p class="muted">Box condition, paintwork checks, and safe packing. Your figure arrives shelf-ready.</p>
+          </article>
+          <article class="card">
+            <h3>Care After Sales</h3>
+            <p class="muted">Replacement assistance on defects, missing parts coordination, and packaging advice.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 真实性 & 质检流程 -->
+      <section>
+        <div class="section-title">
+          <h2>Authenticity & QC Flow</h2><div class="line"></div>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="n">01</div><div class="muted">Source from official channels only</div></div>
+          <div class="step"><div class="n">02</div><div class="muted">Seal/box inspection & barcode check</div></div>
+          <div class="step"><div class="n">03</div><div class="muted">Paintwork spot review (randomized)</div></div>
+          <div class="step"><div class="n">04</div><div class="muted">Shock-proof packing & photo evidence</div></div>
+        </div>
+      </section>
+
+      <!-- 品牌背书 / 合作方（占位） -->
+      <section>
+        <div class="section-title">
+          <h2>Trusted by partners</h2><div class="line"></div>
+        </div>
+        <div class="logos">
+          <div class="logo">Partner A</div>
+          <div class="logo">Partner B</div>
+          <div class="logo">Partner C</div>
+          <div class="logo">Partner D</div>
+          <div class="logo">Partner E</div>
+        </div>
+      </section>
+
+      <!-- 里程碑时间线 -->
+      <section>
+        <div class="section-title">
+          <h2>Milestones</h2><div class="line"></div>
+        </div>
+        <div class="timeline">
+          <div class="t-item"><div class="t-date">2016</div><div class="muted">OtakuFigures founded — focused on licensed figures only.</div></div>
+          <div class="t-item"><div class="t-date">2018</div><div class="muted">First major studio partnership & pre-order campaigns.</div></div>
+          <div class="t-item"><div class="t-date">2021</div><div class="muted">Global shipping rollout with improved protective packing.</div></div>
+          <div class="t-item"><div class="t-date">2024</div><div class="muted">Launched anti-bootleg comparison guides & care program.</div></div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section>
+        <div class="section-title">
+          <h2>FAQ</h2><div class="line"></div>
+        </div>
+        <div class="faq">
+          <details class="qa">
+            <summary>Are your products authentic?</summary>
+            <div class="a">Yes. We source from official distributors only, and our QC flow includes seal/box checks and barcode validation.</div>
+          </details>
+          <details class="qa">
+            <summary>What if my figure arrives damaged?</summary>
+            <div class="a">Contact us within 7 days with photos. We’ll assist with replacement or parts coordination with the distributor.</div>
+          </details>
+          <details class="qa">
+            <summary>Do you ship internationally?</summary>
+            <div class="a">Yes. We use tracked methods and extra padding/wrap for long routes.</div>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="note">© <span id="y"></span> OtakuFigures — About page template. Replace images & copy.</div>
+    </footer>
+  </div>
+
+<script>
+  // 年份
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // 可选：?bg=... 设自定义背景图（完整显示在“内容之下”的银河光臂上方）
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var bg = params.get('bg');
+    if (bg) {
+      // 在银河光臂层之下追加你的背景图（不影响动效）
+      var el = document.querySelector('.bg');
+      el.style.backgroundImage =
+        "url('" + bg.replace(/'/g, "\\'") + "')," +
+        "radial-gradient(1200px 600px at 50% -220px, rgba(14,165,233,.18), transparent 60%)," +
+        "radial-gradient(closest-corner at 50% 50%, rgba(124,58,237,.10), rgba(0,0,0,0) 70%)," +
+        "var(--bg)";
+      el.style.backgroundRepeat = "no-repeat, no-repeat, no-repeat, no-repeat";
+      el.style.backgroundPosition = "center, center, center, center";
+      el.style.backgroundSize = "contain, auto, auto, auto";
+      el.style.backgroundAttachment = "fixed, fixed, fixed, fixed";
+    }
+  })();
+</script>
+</body>
+</html>
